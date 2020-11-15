@@ -9,7 +9,7 @@ CFLAGS = -Wall -O2 -fomit-frame-pointer
 LDFLAGS = -s
 LIBS =
 # Linux with glibc, FreeBSD, NetBSD
-#LIBS += -lcrypt
+LIBS += -lcrypt
 # HP-UX trusted system
 #LIBS += -lsec
 # Solaris (POP_STANDALONE, POP_VIRTUAL)
