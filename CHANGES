@@ -1,0 +1,129 @@
+	Changes made between 1.0.2 and 1.0.3 (2012/08/15).
+
+Handle possible NULL returns from crypt(3).
+
+Revised the included MD5 routines to help the compiler detect a common
+subexpression between steps in round 3.
+
+Switched to heavily cut-down BSD license.
+
+
+	Changes made between 1.0.1 and 1.0.2 (2006/05/23).
+
+A couple of optimizations specific to x86-64 have been applied to the
+included MD5 routines.
+
+
+	Changes made between 1.0 and 1.0.1 (2006/03/07).
+
+Use sysconf(_SC_CLK_TCK) instead of CLK_TCK when _SC_CLK_TCK is known to
+be available or CLK_TCK is not.  This is needed for portability to glibc
+2.3.90+ and possibly to other recent and future systems.
+
+Use socklen_t where appropriate.
+
+
+	Changes made between 0.6.4.1 and 1.0 (2005/05/26).
+
+Corrected the source code to not break C strict aliasing rules (this
+only affected auth_pam.c).
+
+With Sun PAM (Solaris, HP-UX), insist on only one PAM message per call
+to the conversation function because of differences in the layout of
+the "msg" parameter.
+
+Bumped the default limits to values that are way too high for most
+systems (I'm sure these will still be insufficient for some, though,
+but hopefully those systems actually got experienced sysadmins).
+Added comments suggesting that these defaults be decreased on
+particular installs.
+
+
+	Changes made between 0.6.4 and 0.6.4.1 (2004/07/22).
+
+Bugfix: actually zeroize the context structure in MD5_Final().  Thanks
+to Andrey Panin and Timo Sirainen for bringing this to my attention.
+This change makes no difference for popa3d, but may be important for
+possible other applications which might use these MD5 routines.
+
+
+	Changes made between 0.6.3 and 0.6.4 (2003/11/17).
+
+The uses of sprintf(3) have been replaced by the concat() function
+implemented locally.
+
+
+	Changes made between 0.6.2 and 0.6.3 (2003/04/13).
+
+libpam_userpass support (with pam_userpass 0.9+).
+
+
+	Changes made between 0.6.1 and 0.6.2 (2003/03/10).
+
+Rate-limit the "sessions limit reached" log message similarly to the
+per-source one; spotted by Michael Tokarev.
+
+Started maintaining this change log (including information on a few
+past versions), due to popular demand.  Added a separate file with
+contact information (homepage, mailing list, author e-mail address,
+commercial support).  Updated the installation instructions to note
+the importance of authentication and locking method choice, added
+instructions on the use of xinetd and popa3d's standalone mode.
+
+
+	Changes made between 0.6 and 0.6.1 (2003/03/02).
+
+Ensure proper logging of abnormally terminated sessions: distinguish
+server failures from external modification to the mailbox by other
+instances of popa3d or other MUAs.  Previously, if external mailbox
+modification would occur during processing of a RETR command, popa3d
+could improperly log a "server failure" (0.6) or even a "premature
+disconnect" (older versions).
+
+Added version.c and the -V option to print out version information.
+
+
+	Changes made between 0.5.9 and 0.6 (2003/02/20).
+
+Corrected the message size reporting bug introduced with 0.4.9.3 and
+now reported on popa3d-users by Nuno Teixeira.  The only known POP3
+client known to complain about this is fetchmail, and it would get the
+mail correctly anyway.
+
+
+	Changes made between 0.5.1 and 0.5.9 (2002/09/24).
+
+Correctness and interoperability fixes.  This includes a workaround
+for an Outlook Express client bug which would show up on body-less
+messages.
+
+
+	Changes made between 0.5 and 0.5.1 (2002/04/17).
+
+Re-worked all of the UIDL calculation, adding support for multi-line
+headers and re-considering which headers to use.
+
+Let the local delivery agent help generate unique IDs by setting the
+X-Delivery-ID: header.
+
+
+	Changes made between 0.4 and 0.5 (2001/10/28).
+
+Added PAM support (old-fashioned or via Linux-PAM binary prompts),
+choice for fcntl(2) and/or flock(2) locking, qmail-style ~/Mailbox
+support, improved logging, optional libwrap support, virtual domain
+support hooks.
+
+Parts of the daemon code are now run in a chroot jail (/var/empty).
+
+The inetd vs. standalone mode setting is now run-time configurable.
+
+The GNU MD5 routines have been replaced with own public domain
+implementation to relax the license for the entire package (now BSD
+and (L)GPL-compatible), solve certain portability issues, and reduce
+code size.
+
+Added a popa3d(8) manual page based on the one Camiel Dobbelaar wrote
+for OpenBSD.
+
+$Owl: Owl/packages/popa3d/popa3d/CHANGES,v 1.12 2012/08/15 09:29:17 solar Exp $

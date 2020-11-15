@@ -1,0 +1,83 @@
+	Installing popa3d.
+
+1. Read the comments in params.h and edit the #define's to suit your
+needs:
+
+	$ vi params.h
+
+It is especially important to choose a password authentication method
+that will be right for your system (you need to pick exactly one) and
+the mailbox locking method your system uses (it must match your other
+mail software).
+
+2. Possibly edit the Makefile (uncomment "-lcrypt" for Linux with
+glibc, FreeBSD or NetBSD, uncomment "-lpam" if you will use PAM):
+
+	$ vi Makefile
+
+3. Build popa3d:
+
+	$ make
+
+4. Create a non-privileged popa3d user, like this (or using whatever
+other user management commands your system has):
+
+	# groupadd popa3d
+	# useradd -g popa3d -d /dev/null -s /dev/null popa3d
+
+5. Create an empty directory for popa3d to chroot to (unless your
+system provides a directory intended for this purpose already):
+
+	# mkdir -m 755 /var/empty
+
+6. Install the popa3d binary and the man page under /usr/local:
+
+	# make install
+
+7. If you intend to start popa3d via inetd (rather than run it as a
+standalone service), the /etc/inetd.conf line for popa3d should look
+like this:
+
+	pop3 stream tcp nowait root /usr/sbin/tcpd /usr/local/sbin/popa3d
+
+This assumes that you have and want to use TCP wrappers.  If not, you
+may omit the tcpd (but see the note below).
+
+Alternatively, if you're using xinetd, the configuration file section
+may be like this:
+
+service pop3
+{
+	socket_type	= stream
+	protocol	= tcp
+	wait		= no
+	user		= root
+	server		= /usr/local/sbin/popa3d
+	log_type	= SYSLOG daemon info
+	log_on_success	= PID HOST DURATION
+	log_on_failure	= HOST
+	instances	= 100
+	per_source	= 10
+}
+
+The last 5 attributes are optional.
+
+Note: when started via an inetd clone, the logging of connections is
+left up to that inetd clone or TCP wrappers.  If your inetd does not
+log connecting IP addresses and you don't want to use TCP wrappers,
+you should use popa3d in standalone mode.
+
+To actually start the service, you need to tell your inetd to reload
+configuration.  Typically, this is achieved by sending it a SIGHUP:
+
+	# kill -HUP `cat /var/run/inetd.pid`
+
+For xinetd, the reload signal is either SIGUSR2 for older versions or
+SIGHUP for newer ones, please consult your xinetd documentation.
+
+8. If you intend to run popa3d as a standalone service (and you built
+it with standalone mode support!), you need to start it with:
+
+	# /usr/local/sbin/popa3d -D
+
+$Owl: Owl/packages/popa3d/popa3d/INSTALL,v 1.3 2005/11/16 13:28:58 solar Exp $
