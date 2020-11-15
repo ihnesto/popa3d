@@ -23,6 +23,7 @@ LIBS += -lcrypt
 # OpenSSL (-DHAVE_OPENSSL)
 #LIBS += -lcrypto
 
+
 DESTDIR =
 PREFIX = /usr/local
 SBINDIR = $(PREFIX)/sbin
